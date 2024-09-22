@@ -1,74 +1,58 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-
+import java.util.Scanner;
 public class Rot13 {
-    static char[] abecedarioMin = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    static char[] abecedarioMay = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-   //CIFRAR
-    public static String xifraRot13(String mensaje){
-        String mensajeNuevo = "";
-        for(int i = 0; i < mensaje.length(); i++){
-            boolean escaracter = true;
-            char caracter = mensaje.charAt(i);
-            for(int x = 0; x < abecedarioMin.length; x++){
-                if(caracter == abecedarioMin[x]){
-                    escaracter = false;
-                    if((x+13) < abecedarioMin.length){
-                        mensajeNuevo += abecedarioMin[x+13];
-                    }else{
-                        mensajeNuevo += abecedarioMin[(x+13) - abecedarioMin.length];
-                    }
+    private static final char[] abecedarioMin = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    private static final char[] abecedarioMay = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    public static String CompararAbc(String mensajeNuevo, char caracter, char[] abecedario, int x, int recorrido){
+        int indexIn = recorrido + x;
+        if(caracter == abecedario[x]){
+            if(indexIn < abecedario.length && indexIn > -1){
+                mensajeNuevo += abecedario[indexIn];
+            }else{
+                if(recorrido == 13){
+                    mensajeNuevo += abecedario[indexIn - abecedario.length];
+                }else{
+                    mensajeNuevo += abecedario[abecedario.length + indexIn];
                 }
-                if(caracter == abecedarioMay[x]){
-                    escaracter = false;
-                    if((x+13) < abecedarioMin.length){
-                        mensajeNuevo += abecedarioMay[x+13];
-                    }else{
-                        mensajeNuevo += abecedarioMay[(x+13) - abecedarioMay.length];
-                    }
-                }
-            }
-            if(escaracter){
-                mensajeNuevo += caracter;
             }
         }
-
+        return mensajeNuevo;
+    }
+    public static String recorrerAbc(String mensajeNuevo,String mensaje, int recorrido){
+        char caracter = 'e';
+        int mensajeNuevoLength = 0;
+            for (int i = 0; i < mensaje.length(); i++) {
+                mensajeNuevoLength = mensajeNuevo.length();
+                caracter = mensaje.charAt(i);
+                for (int x = 0; x < abecedarioMin.length; x++) {
+                    mensajeNuevo = CompararAbc(mensajeNuevo, caracter, abecedarioMin, x,recorrido);
+                    mensajeNuevo = CompararAbc(mensajeNuevo, caracter, abecedarioMay, x,recorrido);
+                }
+                if(mensajeNuevoLength == mensajeNuevo.length()){
+                    mensajeNuevo += caracter;
+                }
+        }
+        return mensajeNuevo;
+    }
+    //CIFRAR
+    public static String xifraRot13(String mensaje) {
+        String mensajeNuevo = "";
+        mensajeNuevo = recorrerAbc(mensajeNuevo, mensaje, 13);
         return mensajeNuevo;
     }
     //DESCIFRAR
     public static String desxifraRot13(String mensaje){
         String mensajeNuevo = "";
-        for(int i = 0; i < mensaje.length(); i++){
-            boolean escaracter = true;
-            char caracter = mensaje.charAt(i);
-            for(int x = 0; x < abecedarioMin.length; x++){
-                if(caracter == abecedarioMin[x]){
-                    escaracter = false;
-                    if((x-13) > -1){
-                        mensajeNuevo += abecedarioMin[x-13];
-                    }else{
-                        mensajeNuevo += abecedarioMin[abecedarioMin.length + (x-13)];
-                    }
-                }
-                if(caracter == abecedarioMay[x]){
-                    escaracter = false;
-                    if((x-13) > -1){
-                        mensajeNuevo += abecedarioMay[x-13];
-                    }else{
-                        mensajeNuevo += abecedarioMay[abecedarioMay.length + (x-13)];
-                    }
-                }
-            }
-            if(escaracter){
-                mensajeNuevo += caracter;
-            }
-        }
+        mensajeNuevo = recorrerAbc(mensajeNuevo,mensaje, -13);
         return mensajeNuevo;
     }
     public static void main(String[] args) {
-        String mensajeCifrado = xifraRot13("caBecera, cabecEra");
+        Scanner scanner = new Scanner(System.in);
+        String mensajeCifrado = "";
+        System.out.print("Introduzca el mensaje que desea cifrar: ");
+        mensajeCifrado = xifraRot13(scanner.nextLine());
         String mensajeDescifrado = desxifraRot13(mensajeCifrado);
-        System.out.println(mensajeCifrado);
-        System.out.println(mensajeDescifrado);
+        System.out.println("El mensaje cifrado es: " + mensajeCifrado + "\nEl mensaje descifrado es: " + mensajeDescifrado);
     }
 }
