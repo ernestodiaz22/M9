@@ -74,12 +74,16 @@ public class Rot13 {
             }
             if(!esNumero){
                 try{
-                    System.out.print("Introduzca el número de veces que desea desplazar cada letra del mensaje: ");
+                    System.out.print("Introduzca el número de veces que desea desplazar cada letra del mensaje (del 1 al 42): ");
                     int recorrido = scanner.nextInt();
-                    String mensajeCifrado = (xifraRot13(mensaje, recorrido));
-                    String mensajeDescifrado = desxifraRot13(mensajeCifrado, recorrido);
-                    System.out.println("El mensaje cifrado es: " + mensajeCifrado + "\nEl mensaje descifrado es: " + mensajeDescifrado);
-                    forcaBrutaRotX(mensajeCifrado);
+                    if(recorrido < 43  && recorrido  > 0){
+                        String mensajeCifrado = (xifraRot13(mensaje, recorrido));
+                        String mensajeDescifrado = desxifraRot13(mensajeCifrado, recorrido);
+                        System.out.println("El mensaje cifrado es: " + mensajeCifrado + "\nEl mensaje descifrado es: " + mensajeDescifrado);
+                        forcaBrutaRotX(mensajeCifrado);
+                    }else{
+                        System.err.print("Introduzca un número entre 1 y 42.");
+                    }
                 }catch(InputMismatchException e){
                     System.err.println("Debe introducir un número como recorrido para el desplazamiento: " + e);
                 }
