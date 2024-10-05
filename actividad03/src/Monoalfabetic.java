@@ -65,7 +65,8 @@ public class Monoalfabetic {
         permutaAlfabet(abecedario);
             try(BufferedReader reader1 = new BufferedReader(new InputStreamReader(System.in))){
                 while( menu != 3) {
-                    try{                    System.out.print("1.Mostrar alfabeto cifrado\n2.cifrar \n3.salir:\nIntroduzca una opción:");
+                    try{
+                        System.out.print("1.Mostrar alfabeto cifrado\n2.cifrar \n3.salir:\nIntroduzca una opción:");
                         menu = Integer.parseInt(reader1.readLine());
                         if (menu == 1) {
                             mostrarAbc(false);
