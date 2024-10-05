@@ -4,24 +4,26 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
+
 public class Monoalfabetic {
     private static final char[] abecedario = {'a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i','j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','á','à','ä','ç','é','è','ë','í','ì','ï','ó','ò','ö','ú','ù','ü'};
-    private static List<Character> abecedarioCifrado = new ArrayList<Character>();
-    public static  void mostrarAbc(boolean lista) {
+    private static char[] alfabetoCifrado = new char[43];
+    private static List<Character> alfabetoPermuta = new ArrayList<Character>();
+    public static  void mostrarAbc(char[] abecedario) {
         for (int i = 0; i < abecedario.length; i++) {
-            if (lista) {
-                System.out.print(abecedarioCifrado.get(i) + " ");
-            } else {
                 System.out.print(abecedario[i] + " ");
-            }
         }
         System.out.println();
     }
     public static void permutaAlfabet(char[] abecedario){
         for(int i = 0; i < abecedario.length; i++ ){
-            abecedarioCifrado.add(abecedario[i]);
+            alfabetoPermuta.add(abecedario[i]);
         }
-        Collections.shuffle(abecedarioCifrado);
+        Collections.shuffle(alfabetoPermuta);
+        for(int i = 0; i < abecedario.length; i++ ){
+            alfabetoCifrado[i] = alfabetoPermuta.get(i);
+        }
     }
     public static String xifraMonoAlfa(String palabro){
         return recorrerPalabra(palabro,true);
@@ -49,10 +51,10 @@ public class Monoalfabetic {
         for(int i = 0; i < abecedario.length; i++){
                 if(cifrar){
                     if(abecedario[i] == caracter){
-                        newCaracter = esMayus ? Character.toUpperCase(abecedarioCifrado.get(i)) : abecedarioCifrado.get(i);
+                        newCaracter = esMayus ? Character.toUpperCase(alfabetoCifrado[i]) : alfabetoCifrado[i];
                     }
                 }else{
-                    if(abecedarioCifrado.get(i) == caracter){
+                    if(alfabetoCifrado[i] == caracter){
                         newCaracter = esMayus ? Character.toUpperCase(abecedario[i]) :  abecedario[i];
                     }
                 }
@@ -66,11 +68,12 @@ public class Monoalfabetic {
             try(BufferedReader reader1 = new BufferedReader(new InputStreamReader(System.in))){
                 while( menu != 3) {
                     try{
-                        System.out.print("1.Mostrar alfabeto cifrado\n2.cifrar \n3.salir:\nIntroduzca una opción:");
+                        System.out.print("1.Mostrar alfabeto cifrado\n2.cifrar \n3.salir\nIntroduzca una opción:");
                         menu = Integer.parseInt(reader1.readLine());
+                        System.out.println();
                         if (menu == 1) {
-                            mostrarAbc(false);
-                            mostrarAbc(true);
+                            mostrarAbc(abecedario);
+                            mostrarAbc(alfabetoCifrado);
                         } else if (menu == 2) {
                             System.out.print("Introduzca el mensaje que deseas cifrar: ");
                             String palabra = reader1.readLine();
@@ -90,15 +93,18 @@ public class Monoalfabetic {
                                     System.out.println("La palabra cifrada es: " + palabraCifrada);
                                     System.out.println("La palabra descifrada es: " + palabraDescifrada);
                                 } else {
+                                    System.out.println();
                                     System.err.println("Introduzca un valor no numérico.");
                                 }
                             }
                         } else if(menu == 3){
                             System.out.println("Saliendo...");
                         }else{
+                            System.out.println();
                             System.err.println("Introduzca una opción válida: 1.Mostrar alfabeto cifrado, 2.cifrar o 3.salir.");
                         }
                     }catch (NumberFormatException e){
+                        System.out.println();
                         System.err.println("Introduzca un valor númerico: 1.Mostrar alfabeto cifrado, 2.cifrar o 3.salir.");
                     }
                     System.out.println();
